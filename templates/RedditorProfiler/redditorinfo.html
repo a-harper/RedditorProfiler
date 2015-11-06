@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redditor info for {{ redditor }}</title>
+    {% load staticfiles %}
+    <!-- Bootstrap -->
+    <link href="{% static "RedditorProfiler/css/bootstrap.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ redditor }}</h1>
+        {% if info_message %}
+        <h6>{{ info_message }}</h6>
+        {% endif %}
+        <h2 style="padding-top:50px;">Top Posts:</h2>
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Title</td>
+                <td>Score</td>
+                <td>Link</td>
+                <td>Date</td>
+            </tr>
+            {%  for post in top_submissions %}
+                <tr>
+                    <td><b><a href="http://www.reddit.com/r/{{ post.subreddit }}">{{ post.subreddit }}</a></b></td>
+                    <td><a href="{{ post.permalink }}">{{ post.title }}</a></td>
+                    <td>{{ post.score }}</td>
+                    <td><a href="{{ post.url }}">{{ post.url }}</a></td>
+                    <td>{{ post.submission_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="container">
+        <h2 style="padding-top:50px;">Top Comments:</h2>
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Comment</td>
+                <td>Score</td>
+                <td>Link</td>
+                <td>Date</td>
+            </tr>
+            {% for comment in top_comments %}
+                <tr>
+                    <td><b><a href="http://www.reddit.com/r/{{ comment.submission.subreddit }}">{{ comment.submission.subreddit }}</a></b></td>
+                    <td>{{ comment.body }}</td>
+                    <td>{{ comment.score }}</td>
+                    <td><a href="{{ comment.permalink }}">{{ comment.submission.title }}</a></td>
+                    <td>{{ comment.comment_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="container">
+        <h2 style="padding-top:50px;">Worst Comments:</h2>
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Comment</td>
+                <td>Score</td>
+                <td>Link</td>
+                <td>Date</td>
+            </tr>
+            {% for comment in worst_comments %}
+                <tr>
+                    <td><b><a href="http://www.reddit.com/r/{{ comment.submission.subreddit }}">{{ comment.submission.subreddit }}</a></b></td>
+                    <td>{{ comment.body }}</td>
+                    <td>{{ comment.score }}</td>
+                    <td><a href="{{ comment.permalink }}">{{ comment.submission.title }}</a></td>
+                    <td>{{ comment.comment_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="container">
+        <h2 style="padding-top:50px;">Most Frequent Subreddits Posted To:</h2>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#biglist">Show</button>
+        <div id="biglist" class="collapse">
+        <table class="table table-condensed table-striped table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Number of contributions</td>
+            </tr>
+            {% for sub, count, flagged in sublist %}
+                <tr{% if flagged %} style="background-color:orange"{% endif %}>
+                    <td><a href="{% url 'RedditorProfiler:subreddits' username=redditor subreddit=sub %}">{{ sub }}</a></td>
+                    <td>{{ count }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% if nsfw_posts.count > 0 %}
+    <div class="container">
+        <h2 style="padding-top:50px;">NSFW Posts:</h2>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#nsfwpost">Show</button>
+        <div id="nsfwpost" class="collapse">
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Title</td>
+                <td>Score</td>
+                <td>Link</td>
+                <td>Date</td>
+            </tr>
+            {%  for post in nsfw_posts %}
+                <tr>
+                    <td><b><a href="http://www.reddit.com/r/{{ post.subreddit }}">{{ post.subreddit }}</a></b></td>
+                    <td><a href="{{ post.permalink }}">{{ post.title }}</a></td>
+                    <td>{{ post.score }}</td>
+                    <td><a href="{{ post.url }}">{{ post.url }}</a></td>
+                    <td>{{ post.submission_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% endif %}
+    {% if nsfw_comments.count > 0 %}
+    <div class="container">
+        <h2 style="padding-top:50px;">NSFW Comments:</h2>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#nsfwcomment">Show</button>
+        <div id="nsfwcomment" class="collapse">
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Comment</td>
+                <td>Score</td>
+                <td>Link</td>
+                <td>Date</td>
+            </tr>
+            {% for comment in nsfw_comments %}
+                <tr>
+                    <td><b><a href="http://www.reddit.com/r/{{ comment.submission.subreddit }}">{{ comment.submission.subreddit }}</a></b></td>
+                    <td>{{ comment.body }}</td>
+                    <td>{{ comment.score }}</td>
+                    <td><a href="{{ comment.permalink }}">{{ comment.submission.title }}</a></td>
+                    <td>{{ comment.comment_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% endif %}
+    {% if badword_comments.count > 0 %}
+    <div class="container">
+        <h2 style="padding-top:50px;">Badword Comments:</h2>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#badwordcomment">Show</button>
+        <div id="badwordcomment" class="collapse">
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td>Subreddit</td>
+                <td>Comment</td>
+                <td>Score</td>
+                <td>Link</td>
+                <td>Flagged for</td>
+                <td>Date</td>
+            </tr>
+            {% for badwordcomment in badword_comments %}
+                <tr>
+                    <td><b><a href="http://www.reddit.com/r/{{ badwordcomment.comment.submission.subreddit }}">{{ badwordcomment.comment.submission.subreddit }}</a></b></td>
+                    <td>{{ badwordcomment.comment.body }}</td>
+                    <td>{{ badwordcomment.comment.score }}</td>
+                    <td><a href="{{ badwordcomment.comment.permalink }}">{{ badwordcomment.comment.submission.title }}</a></td>
+                    <td>{% for word in badwordcomment.words.all %}{{ word }} {% endfor %}</td>
+                    <td>{{ badwordcomment.comment.comment_date }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% endif %}
+    <script src="{% static "RedditorProfiler/js/jquery.js" %}"></script>
+    <script src="{% static "RedditorProfiler/js/bootstrap.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.collapse').click(function(e){
+                $(this).parent().parent().next().find('.detail-container').toggle();
+                var text = $(this).text();
+                $(this).text(text == "+" ? "-" : "+");
+                e.preventDefault();
+            });
+            $('collapse-name').click(function(e{
+                $(this).parent().parent().next().find('.detail-container').toggle();
+                var el = $(this).parent().prev().children('a:first');
+                var text = el.text();
+                el.text(text == "+" ? "-" : "+");
+                e.preventDefault();
+            });
+        });
+
+    </script>
+</body>
+</html>

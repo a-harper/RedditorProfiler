@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Results for {{ redditor }}</title>
+    {% load staticfiles %}
+    <!-- Bootstrap -->
+    <link href="{% static "RedditorProfiler/css/bootstrap.css" %}" rel="stylesheet">
+</head>
+<body>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>
+    {% else %}<p>{{ redditor }} has been added.</p>
+    {% endif %}
+
+
+
+    <script src="{% static "RedditorProfiler/js/jquery.js" %}"></script>
+    <script src="{% static "RedditorProfiler/js/bootstrap.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.collapse').click(function(e){
+                $(this).parent().parent().next().find('.detail-container').toggle();
+                var text = $(this).text();
+                $(this).text(text == "+" ? "-" : "+");
+                e.preventDefault();
+            });
+            $('collapse-name').click(function(e{
+                $(this).parent().parent().next().find('.detail-container').toggle();
+                var el = $(this).parent().prev().children('a:first');
+                var text = el.text();
+                el.text(text == "+" ? "-" : "+");
+                e.preventDefault();
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+     <!-- Bootstrap -->
+    {% load staticfiles %}
+    <link href="{% static "RedditorProfiler/css/bootstrap.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <h1>Enter redditor name:</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form action="{% url 'RedditorProfiler:index' %}" method="post">
+        {% csrf_token %}
+        <input type="Text" name="username" id="id_username" />
+        <!--<label for="id_username">Username</label><br />-->
+    <input type="submit" value="Search"/>
+    </form>
+
+    {% if recently_updated.count > 0 %}
+    <h2>Recently updated:</h2>
+    <ul>
+        {% for redditorstatus in recently_updated %}
+        <li><a href="{% url 'RedditorProfiler:redditor' redditorstatus.redditor.username %}">{{ redditorstatus.redditor.username }} - {{ redditorstatus.redditor.last_updated }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    </div>
+    <script src="{% static "RedditorProfiler/js/jquery.js" %}"></script>
+    <script src="{% static "RedditorProfiler/js/bootstrap.js" %}"></script>
+</body>
+</html>
