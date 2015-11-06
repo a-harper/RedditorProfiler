@@ -23,11 +23,11 @@ Make sure you have the required packages & django apps. RedditorProfiler require
 
     url(r'^redditor/', include('RedditorProfiler.urls', namespace="RedditorProfiler")),
 
-3. Run `python manage.py migrate` to create the polls models.
+3. Run `python manage.py migrate` to create the RedditorProfiler models.
 
 4. Start the development server and visit http://127.0.0.1:8000/admin/
    to add to the list of "interesting" words & add their categories.
    
 5. Start the celery worker (e.g. celery -a djangoapps worker -l info)
 
-6. Visit http://127.0.0.1:8000/polls/ to participate in the poll.
+6. Visit http://127.0.0.1:8000/redditor to start profiling!
