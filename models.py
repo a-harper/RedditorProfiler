@@ -32,6 +32,7 @@ class Subreddit(models.Model):
     name = models.CharField(max_length=100)
     over_18 = models.BooleanField()
     flagged = models.BooleanField(default=False)
+    moderators = models.ManyToManyField(Redditor)
 
     def __unicode__(self):
         return self.name

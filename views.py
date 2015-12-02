@@ -67,6 +67,7 @@ def redditor(request, username):
             nsfw_posts = Submission.objects.filter(redditor=the_bloke, over_18=True)
             nsfw_comments = Comment.objects.filter(redditor=the_bloke, submission__over_18=True)
             badword_comments = BadComment.objects.filter(comment__redditor=the_bloke)
+            modded_subs = Subreddit.objects.filter(moderators=the_bloke)
             sublist = []
             subreddits = Subreddit.objects.all()
             for sub in subreddits:
@@ -87,7 +88,7 @@ def redditor(request, username):
             context = {'top_submissions': top_submissions, 'top_comments': top_comments,
                        'sublist': sublist,
                        'redditor': the_bloke, 'worst_comments': worst_comments, 'nsfw_posts': nsfw_posts,
-                       'nsfw_comments': nsfw_comments, 'badword_comments': badword_comments,
+                       'nsfw_comments': nsfw_comments, 'badword_comments': badword_comments, 'modded_subs': modded_subs,
                        'info_message': info_message}
 
    # except:
@@ -101,6 +102,8 @@ def subreddits(request, username, subreddit):
     submissions = Submission.objects.filter(redditor=bloke).filter(subreddit__name=subreddit).order_by('-score')
     comments = Comment.objects.filter(redditor=bloke).filter(submission__subreddit__name=subreddit).order_by('-score')
     sublink = "/r/" + subreddit
-    context = {'redditor': bloke, 'submissions': submissions, 'comments': comments, 'sub': subreddit, 'sublink': sublink}
+    the_sub = Subreddit.objects.get(name=subreddit)
+    context = {'redditor': bloke, 'submissions': submissions, 'comments': comments, 'sub': subreddit,
+               'sublink': sublink, 'the_sub': the_sub }
 
     return render(request, 'RedditorProfiler/subreddits.html', context)

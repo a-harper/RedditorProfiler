@@ -121,6 +121,12 @@ def create_subreddit(subreddit):
     sub.over_18 = the_dict['data']['over18']
     sub.flagged = False
     sub.save()
+    for user in subreddit.get_moderators():
+        if Redditor.objects.filter(username=user.name).count() < 1:
+            create_user(user)
+        mod = Redditor.objects.get(username=user.name)
+        sub.moderators.add(mod)
+        sub.save()
 
 
 def create_user(user):

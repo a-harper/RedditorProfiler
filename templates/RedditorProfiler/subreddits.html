@@ -14,6 +14,10 @@
         <a href="{% url 'RedditorProfiler:redditor' redditor %}" class="btn" role="button">Back</a>
         <div class="container">
         <h1>{{ sub }}</h1>
+            <h3>Moderators</h3>
+            {% for mod in the_sub.moderators.all %}
+                <a href="http://www.reddit.com/u/{{ mod }}">{{ mod }}</a> - <a href="{% url 'RedditorProfiler:redditor' mod.username %}">Search</a><br />
+            {% endfor %}
             {% if submissions.count > 0 %}
             <h3 style="padding-top:50px;">Submissions</h3>
             <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#submissions">Show</button>

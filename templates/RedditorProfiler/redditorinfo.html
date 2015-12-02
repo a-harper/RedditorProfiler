@@ -15,6 +15,9 @@
         {% if info_message %}
         <h6>{{ info_message }}</h6>
         {% endif %}
+        {% if modded_subs.count > 0 %}
+        <h6>Mod of: {% for sub in modded_subs %}{{sub.name}}{% if forloop.last %}{% else %} - {% endif %}{% endfor %}</h6>
+        {% endif %}
         <h2 style="padding-top:50px;">Top Posts:</h2>
         <table class="table table-bordered table-hover" style="padding-top:50px;">
             <tr>
